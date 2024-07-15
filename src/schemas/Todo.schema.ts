@@ -1,17 +1,28 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
 import { HydratedDocument } from 'mongoose';
-import { MemberSchema } from './Members.schema';
+import { Member } from './Members.schema';
 
 export type ToDoDocument = HydratedDocument<ToDo>;
 
+@Schema()
+class UpdateHistory {
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Members' })
+  updatedBy: Member;
+
+  @Prop({ default: new Date() })
+  updatedAt: Date;
+}
+
+const UpdateHistorySchema = SchemaFactory.createForClass(UpdateHistory);
+
+@Schema()
 export class ToDo {
+  @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
+  _id: mongoose.Schema.Types.ObjectId;
+
   @Prop({ required: true })
   title: string;
-
-  @Prop({ unique: true })
-  uniqe: string;
 
   @Prop()
   description: string;
@@ -22,14 +33,14 @@ export class ToDo {
   @Prop({ default: new Date() })
   createdAt: Date;
 
-  @Prop({ default: new Date() })
-  updatedAt: Date;
+  @Prop({ type: [UpdateHistorySchema], default: [] })
+  updateHistory: UpdateHistory[];
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Members' })
-  members: MemberSchema;
+  author: Member;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Members' })
-  author: MemberSchema;
+  @Prop({ default: 'todo' })
+  status: string;
 }
 
 export const ToDoSchema = SchemaFactory.createForClass(ToDo);

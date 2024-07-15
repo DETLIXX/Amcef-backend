@@ -13,17 +13,31 @@ exports.ToDoSchema = exports.ToDo = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose = require("mongoose");
 const Members_schema_1 = require("./Members.schema");
-class ToDo {
-}
+let UpdateHistory = class UpdateHistory {
+};
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, ref: 'Members' }),
+    __metadata("design:type", Members_schema_1.Member)
+], UpdateHistory.prototype, "updatedBy", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: new Date() }),
+    __metadata("design:type", Date)
+], UpdateHistory.prototype, "updatedAt", void 0);
+UpdateHistory = __decorate([
+    (0, mongoose_1.Schema)()
+], UpdateHistory);
+const UpdateHistorySchema = mongoose_1.SchemaFactory.createForClass(UpdateHistory);
+let ToDo = class ToDo {
+};
 exports.ToDo = ToDo;
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, auto: true }),
+    __metadata("design:type", mongoose.Schema.Types.ObjectId)
+], ToDo.prototype, "_id", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], ToDo.prototype, "title", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ unique: true }),
-    __metadata("design:type", String)
-], ToDo.prototype, "uniqe", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
@@ -37,16 +51,19 @@ __decorate([
     __metadata("design:type", Date)
 ], ToDo.prototype, "createdAt", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: new Date() }),
-    __metadata("design:type", Date)
-], ToDo.prototype, "updatedAt", void 0);
+    (0, mongoose_1.Prop)({ type: [UpdateHistorySchema], default: [] }),
+    __metadata("design:type", Array)
+], ToDo.prototype, "updateHistory", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, ref: 'Members' }),
-    __metadata("design:type", Members_schema_1.MemberSchema)
-], ToDo.prototype, "members", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, ref: 'Members' }),
-    __metadata("design:type", Members_schema_1.MemberSchema)
+    __metadata("design:type", Members_schema_1.Member)
 ], ToDo.prototype, "author", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 'todo' }),
+    __metadata("design:type", String)
+], ToDo.prototype, "status", void 0);
+exports.ToDo = ToDo = __decorate([
+    (0, mongoose_1.Schema)()
+], ToDo);
 exports.ToDoSchema = mongoose_1.SchemaFactory.createForClass(ToDo);
 //# sourceMappingURL=Todo.schema.js.map

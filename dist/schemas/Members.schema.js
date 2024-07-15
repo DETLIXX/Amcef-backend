@@ -9,35 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MemberSchemaEntity = exports.MemberSchema = void 0;
+exports.MemberSchema = exports.Member = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
-class MemberSchema {
-}
-exports.MemberSchema = MemberSchema;
+let Member = class Member {
+};
+exports.Member = Member;
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, auto: true }),
+    __metadata("design:type", mongoose_2.default.Schema.Types.ObjectId)
+], Member.prototype, "_id", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], MemberSchema.prototype, "username", void 0);
+], Member.prototype, "username", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ unique: true }),
+    __metadata("design:type", String)
+], Member.prototype, "email", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], MemberSchema.prototype, "email", void 0);
+], Member.prototype, "password", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", String)
-], MemberSchema.prototype, "password", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: 'User', enum: ['User', 'Admin'] }),
+    (0, mongoose_1.Prop)({ default: 'User' }),
     __metadata("design:type", Array)
-], MemberSchema.prototype, "role", void 0);
+], Member.prototype, "role", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Todo' }] }),
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Folder' }] }),
     __metadata("design:type", Array)
-], MemberSchema.prototype, "assignedTodos", void 0);
+], Member.prototype, "assignedFolders", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: new Date() }),
     __metadata("design:type", Date)
-], MemberSchema.prototype, "createdAt", void 0);
-exports.MemberSchemaEntity = mongoose_1.SchemaFactory.createForClass(MemberSchema);
+], Member.prototype, "createdAt", void 0);
+exports.Member = Member = __decorate([
+    (0, mongoose_1.Schema)()
+], Member);
+exports.MemberSchema = mongoose_1.SchemaFactory.createForClass(Member);
 //# sourceMappingURL=Members.schema.js.map

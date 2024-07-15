@@ -1,25 +1,31 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { ToDo } from './Todo.schema';
 
-export class MemberSchema {
+export type MemberDocument = HydratedDocument<Member>;
+
+@Schema()
+export class Member {
+  @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
+  _id: mongoose.Schema.Types.ObjectId;
+
   @Prop()
   username: string;
 
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
   @Prop()
-  password: string;
+  password?: string;
 
-  @Prop({ default: 'User', enum: ['User', 'Admin'] })
+  @Prop({ default: 'User' })
   role: string[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Todo' }] })
-  assignedTodos: ToDo[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Folder' }] })
+  assignedFolders: ToDo[];
 
   @Prop({ default: new Date() })
   createdAt: Date;
 }
 
-export const MemberSchemaEntity = SchemaFactory.createForClass(MemberSchema);
+export const MemberSchema = SchemaFactory.createForClass(Member);

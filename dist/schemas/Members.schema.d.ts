@@ -1,15 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { ToDo } from './Todo.schema';
-export declare class MemberSchema {
+export type MemberDocument = HydratedDocument<Member>;
+export declare class Member {
+    _id: mongoose.Schema.Types.ObjectId;
     username: string;
     email: string;
-    password: string;
+    password?: string;
     role: string[];
-    assignedTodos: ToDo[];
+    assignedFolders: ToDo[];
     createdAt: Date;
 }
-export declare const MemberSchemaEntity: mongoose.Schema<MemberSchema, mongoose.Model<MemberSchema, any, any, any, mongoose.Document<unknown, any, MemberSchema> & MemberSchema & {
-    _id: mongoose.Types.ObjectId;
-}, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, MemberSchema, mongoose.Document<unknown, {}, mongoose.FlatRecord<MemberSchema>> & mongoose.FlatRecord<MemberSchema> & {
-    _id: mongoose.Types.ObjectId;
-}>;
+export declare const MemberSchema: mongoose.Schema<Member, mongoose.Model<Member, any, any, any, mongoose.Document<unknown, any, Member> & Member & Required<{
+    _id: mongoose.Schema.Types.ObjectId;
+}>, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, Member, mongoose.Document<unknown, {}, mongoose.FlatRecord<Member>> & mongoose.FlatRecord<Member> & Required<{
+    _id: mongoose.Schema.Types.ObjectId;
+}>>;
