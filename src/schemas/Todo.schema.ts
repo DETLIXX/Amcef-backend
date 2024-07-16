@@ -41,6 +41,9 @@ export class ToDo {
 
   @Prop({ default: 'todo' })
   status: string;
+
+  @Prop()
+  deadline: Date;
 }
 
 export const ToDoSchema = SchemaFactory.createForClass(ToDo);

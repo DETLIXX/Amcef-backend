@@ -10,6 +10,7 @@ import { Member } from 'src/schemas/Members.schema';
 import { Folder } from 'src/schemas/Folder.schema';
 import { CreateToDoDto, DeleteToDoDTO, UpdateTodoDTO } from 'src/dto/todo.dto';
 import { PermissionsService } from 'src/common/permissions.common.service';
+import moment from 'moment';
 @Injectable()
 export class TodosService {
   constructor(
@@ -72,10 +73,11 @@ export class TodosService {
     ]);
 
     if (
-      !this.isFolderMember(folder, editor) &&
-      !this.isToDoInFodler(todoId, folder)
+      !this.isFolderMember(folder, editor) ||
+      !this.isToDoInFodler(todoId, folder) ||
+      !this.isBeforeDeadline(todo)
     ) {
-      throw new ForbiddenException('You are not allowed to delete this todo');
+      throw new ForbiddenException('You are not allowed to edit this todo');
     }
 
     if (todo.isCompleted)
@@ -108,7 +110,7 @@ export class TodosService {
 
     if (
       !this.isFolderMember(findFolderById, memberId) ||
-      !this.isToDoInFodler(todoId, findFolderById)
+      !this.isToDoInFodler(todoId, findFolderById) ||
     ) {
       throw new ForbiddenException('You are not allowed to delete this todo');
     }
@@ -129,6 +131,12 @@ export class TodosService {
     }
 
     return folder;
+  }
+
+  private async isBeforeDeadline(todo: ToDo) {
+    const now = moment().toDate();
+    if(now > todo.deadline) return false
+    return true;
   }
 
   private async isToDoInFodler(todoId: Types.ObjectId, folder: Folder) {

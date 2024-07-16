@@ -7,6 +7,7 @@ import { Member } from 'src/schemas/Members.schema';
 import { HashService } from '../../common/auth.common.service';
 import { CreateMemberDTO } from 'src/dto/members.dto';
 import { JwtService } from '@nestjs/jwt';
+import validator from 'email-validator';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,10 @@ export class AuthService {
 
   async register(body: CreateMemberDTO): Promise<Member> {
     const { username, email, password } = body;
+
+    if (!validator.validate(email))
+      throw new NotFoundException('Email is not valid');
+
     const returnHash = await this.hashService.hashPassword(password);
     const newMember = new this.memberModel({
       username,
